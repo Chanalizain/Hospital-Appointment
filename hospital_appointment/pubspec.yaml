@@ -1,0 +1,31 @@
+name: hospital_appointment
+description: A sample command-line application.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.9.2
+
+# Add regular dependencies here.
+dependencies:
+  path: ^1.9.0
+  # Data Modeling (Immutability)
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  # Functional Error Handling
+  dartz: ^0.10.1
+  # Networking (for Data Layer)
+  dio: ^5.4.3
+  # Dependency Injection/Service Locator
+  get_it: ^7.6.4
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
+  # Code Generation Tools
+  build_runner: ^2.4.9
+  freezed: ^2.5.2
+  json_serializable: ^6.7.1
+  # Testing Tools
+  mockito: ^5.4.4
+  
