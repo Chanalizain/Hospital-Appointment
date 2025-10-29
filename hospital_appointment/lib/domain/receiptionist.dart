@@ -1,4 +1,4 @@
-import 'person.dart';
+import 'package:hospital_appointment/domain/person.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
