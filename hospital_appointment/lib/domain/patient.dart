@@ -1,5 +1,5 @@
-import 'guardian.dart';
-import 'person.dart';
+import 'package:hospital_appointment/domain/guardian.dart';
+import 'package:hospital_appointment/domain/person.dart';
 
 import 'package:uuid/uuid.dart';
 
