@@ -9,6 +9,13 @@ class Patient extends Person {
   String patientId;
   Guardian? guardian;
 
-  Patient({String? patientId, required super.name, required super.gender, required super.dob, required super.phoneNumber, this.guardian})
-          : patientId = patientId ?? uuid.v4();
+  Patient({
+    String? patientId,
+    required super.name,
+    required super.gender,
+    required super.dob,
+    String? phoneNumber, 
+    this.guardian,
+  })  : patientId = patientId ?? uuid.v4(),
+        super(phoneNumber: phoneNumber ?? guardian?.phone ?? '');
 }

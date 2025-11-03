@@ -1,4 +1,5 @@
-import 'appointment.dart';
+import 'package:hospital_appointment/domain/appointment.dart';
+import 'package:hospital_appointment/domain/doctor.dart';
 
 enum TimeSlot {
   slot1,
@@ -17,6 +18,7 @@ class BookingSlot {
   final TimeSlot timeSlot;
   bool isBooked; 
   Appointment? appointment; 
+  Doctor doctor;
 
   BookingSlot({
     required this.date,
@@ -24,6 +26,7 @@ class BookingSlot {
     required this.timeSlot,
     this.isBooked = false, 
     this.appointment,
+    required this.doctor
   }) : assert(isBooked == (appointment != null), 
             'isBooked must match the presence of an appointment.');
 
@@ -51,4 +54,27 @@ class BookingSlot {
     appointment = null;
     isBooked = false;
   }
+
+  String getTimeSlotLabel(WorkShift shift, TimeSlot slot) {
+    if (shift == WorkShift.morning) {
+      switch (slot) {
+        case TimeSlot.slot1:
+          return "8:00 - 9:00";
+        case TimeSlot.slot2:
+          return "9:15 - 10:15";
+        case TimeSlot.slot3:
+          return "10:30 - 11:45";
+      }
+    } else {
+      switch (slot) {
+        case TimeSlot.slot1:
+          return "1:30 - 2:30";
+        case TimeSlot.slot2:
+          return "2:45 - 3:45";
+        case TimeSlot.slot3:
+          return "4:00 - 5:00";
+      }
+    }
+  }
+
 }

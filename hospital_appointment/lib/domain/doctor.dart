@@ -1,5 +1,4 @@
 import 'package:hospital_appointment/domain/person.dart';
-import 'package:hospital_appointment/domain/BookingSlot.dart';
 import 'package:uuid/uuid.dart';
 
 //AI generated
@@ -20,7 +19,6 @@ var uuid = Uuid();
 class Doctor extends Person{
   String doctorId;
   Specialization specialization;
-  List<BookingSlot> bookingSlot = [];
 
   Doctor({String? doctorId, required super.name,required super.gender,required super.dob,required super.phoneNumber, required this.specialization})
         : doctorId = doctorId ?? uuid.v4();
