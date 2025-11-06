@@ -99,18 +99,29 @@ class AppointmentConsole {
       return;
     }
 
-    // Booking date
+  // Booking date with past date validation
+  DateTime? date;
+
+  while (true) {
     stdout.write("Enter the date to book (yyyy-mm-dd): ");
     String? dateInput = stdin.readLineSync();
+
     if (dateInput == null || dateInput.isEmpty) return;
 
-    DateTime date;
     try {
       date = DateTime.parse(dateInput);
+
+      // Check if the date is before today
+      DateTime today = DateTime.now();
+      if (date.isBefore(DateTime(today.year, today.month, today.day))) {
+        print("The date you entered is already past. Please enter a future date.\n");
+        continue;
+      }
+      break; 
     } catch (e) {
-      print("Invalid date format.");
-      return;
+      print("Invalid date format. Please use yyyy-mm-dd.\n");
     }
+  }
 
     hospital.initializeSlotsForDate(date);
 
