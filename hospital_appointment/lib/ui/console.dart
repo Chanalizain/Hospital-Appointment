@@ -358,12 +358,6 @@ class AppointmentConsole {
         listToShow = hospital.appointments;
       }
       else if (choice == '2') {
-        stdout.write("Enter patient name: ");
-        String? name = stdin.readLineSync();
-        if (name == null || name.isEmpty) return;
-        listToShow = hospital.searchAppointmentsByPatientName(name);
-      } 
-      else if (choice == '3') {
         stdout.write("Enter Patient Name (or part of name): ");
         String name = stdin.readLineSync() ?? "";
         stdout.write("Enter Phone Number (Patient or Guardian): ");
@@ -374,7 +368,8 @@ class AppointmentConsole {
             continue; 
         }
         listToShow = hospital.searchAppointmentsByPatientDetails(name, phone); 
-      } else {
+      } 
+      else {
         print("Invalid choice.");
         continue;
       }
@@ -413,10 +408,16 @@ class AppointmentConsole {
         listToShow = hospital.appointments;
       }
       else if (choice == '2') {
-        stdout.write("Enter patient name: ");
-        String? name = stdin.readLineSync();
-        if (name == null || name.isEmpty) return;
-        listToShow = hospital.searchAppointmentsByPatientName(name);
+        stdout.write("Enter Patient Name (or part of name): ");
+        String name = stdin.readLineSync() ?? "";
+        stdout.write("Enter Phone Number (Patient or Guardian): ");
+        String phone = stdin.readLineSync() ?? "";
+        
+        if (name.isEmpty || phone.isEmpty) {
+            print("Name and phone number cannot be empty.");
+            continue; 
+        }
+        listToShow = hospital.searchAppointmentsByPatientDetails(name, phone); 
       } else {
         print("Invalid choice.");
         continue;
@@ -473,10 +474,16 @@ class AppointmentConsole {
         listToShow = hospital.appointments;
       }
       else if (choice == '2') {
-        stdout.write("Enter patient name: ");
-        String? name = stdin.readLineSync();
-        if (name == null || name.isEmpty) return;
-        listToShow = hospital.searchAppointmentsByPatientName(name);
+        stdout.write("Enter Patient Name (or part of name): ");
+        String name = stdin.readLineSync() ?? "";
+        stdout.write("Enter Phone Number (Patient or Guardian): ");
+        String phone = stdin.readLineSync() ?? "";
+        
+        if (name.isEmpty || phone.isEmpty) {
+            print("Name and phone number cannot be empty.");
+            continue; 
+        }
+        listToShow = hospital.searchAppointmentsByPatientDetails(name, phone); 
       } else {
         print("Invalid choice.");
         continue;

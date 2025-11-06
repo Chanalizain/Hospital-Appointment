@@ -107,7 +107,7 @@ void main() {
     Appointment appt = Appointment(patient: adultPatient, doctor: d2, slot: slot);
     hospital.bookAppointment(appt);
 
-    var searchResults = hospital.searchAppointmentsByPatientName("Veysean");
+    var searchResults = hospital.searchAppointmentsByPatientDetails("Veysean", "123456789");
     expect(searchResults.contains(appt), isTrue);
   });
 }

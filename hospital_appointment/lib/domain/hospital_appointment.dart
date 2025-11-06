@@ -166,11 +166,6 @@ class HospitalAppointment {
     return canceled;
   }
 
-  /// Search appointments by patient name
-  List<Appointment> searchAppointmentsByPatientName(String name) {
-    return appointments.where((a) => a.patient.name.toLowerCase().contains(name.toLowerCase())).toList();
-  }
-
   /// Get appointment by list index
   Appointment? getAppointmentByIndex(List<Appointment> list, int index) {
     if (index < 0 || index >= list.length) return null;
