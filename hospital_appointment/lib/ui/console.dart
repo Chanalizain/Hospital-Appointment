@@ -311,7 +311,8 @@ class AppointmentConsole {
           p.phoneNumber == phone &&
           p.dob.year == dob.year &&
           p.dob.month == dob.month &&
-          p.dob.day == dob.day,
+          p.dob.day == dob.day &&
+          p.gender == gender,
     );
 
     if (alreadyExists) {
