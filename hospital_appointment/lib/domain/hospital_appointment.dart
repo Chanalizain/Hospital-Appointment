@@ -1,9 +1,7 @@
 import 'package:hospital_appointment/domain/doctor.dart';
-import 'package:hospital_appointment/domain/guardian.dart';
 import 'package:hospital_appointment/domain/patient.dart';
 import 'package:hospital_appointment/domain/booking_slot.dart';
 import 'package:hospital_appointment/domain/appointment.dart';
-import 'package:hospital_appointment/domain/person.dart';
 
 class HospitalAppointment {
   List<Doctor> doctors;
