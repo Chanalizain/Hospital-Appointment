@@ -257,6 +257,20 @@ class AppointmentConsole {
       return null;
     }
 
+    stdout.write("Enter Gender: ");
+    String? genderInput = stdin.readLineSync();
+
+    Gender gender;
+    String normalized = (genderInput ?? '').toLowerCase().trim();
+    
+    if (normalized.startsWith('m')) {
+        gender = Gender.male;
+    } else if (normalized.startsWith('f')) {
+        gender = Gender.female;
+    } else {
+        gender = Gender.preferNotToSay;
+    }
+
     Guardian? guardian;
     String? phone;
     final age = DateTime.now().year - dob.year;
@@ -326,7 +340,7 @@ class AppointmentConsole {
     // If not exist
     var newPatient = Patient(
       name: name,
-      gender: Gender.preferNotToSay,
+      gender: gender,
       dob: dob,
       phoneNumber: phone,
       guardian: guardian,

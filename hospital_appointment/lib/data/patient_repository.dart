@@ -36,7 +36,7 @@ class PatientRepository {
         patientId: p['patientId'],
         name: p['name'],
         gender: Gender.values.firstWhere(
-          (g) => g.toString() == p['gender'],
+          (g) => g.name == p['gender'],
           orElse: () => Gender.preferNotToSay,
         ),
         dob: DateTime.parse(p['dob']),
@@ -52,7 +52,7 @@ class PatientRepository {
     final Map<String, dynamic> patientData = {
       'patientId': p.patientId,
       'name': p.name,
-      'gender': p.gender.toString(),
+      'gender': p.gender.name,
       'dob': p.dob.toIso8601String(),
       'phoneNumber': p.phoneNumber,
     };
