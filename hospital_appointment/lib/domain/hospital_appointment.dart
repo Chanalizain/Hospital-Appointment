@@ -198,5 +198,20 @@ class HospitalAppointment {
       print("---");
     }
   }
-
+  /// Search appointments by patient name AND patient/guardian phone number
+  List<Appointment> searchAppointmentsByPatientDetails(String name, String phone) {
+    return appointments.where((a) {
+      bool phoneMatches = false;
+      if (!a.patient.name.toLowerCase().contains(name.toLowerCase())) {
+        return false;
+      }
+      if (a.patient.phoneNumber == phone) {
+        phoneMatches = true;
+      } 
+      else if (a.patient.guardian?.phone == phone) {
+        phoneMatches = true;
+      }
+      return phoneMatches;
+    }).toList();
+  }
 }
