@@ -11,7 +11,7 @@ class HospitalAppointment {
 
   HospitalAppointment({required this.doctors});
 
-  /// Register a new patient in hospital
+  // Register a new patient in hospital
   void registerPatient(Patient newPatient) {
     if (newPatient.age < 18 && newPatient.guardian == null) {
       print("Patient under 18 must have a guardian.");
@@ -40,7 +40,7 @@ class HospitalAppointment {
     print("Patient ${newPatient.name} registered successfully.");
   }
 
-  /// Find patient by name and phone number
+  // Find patient by name and phone number
   Patient? findPatientByNamePhone(String name, String phone) {
     try {
       return patients.firstWhere(
@@ -51,21 +51,10 @@ class HospitalAppointment {
     }
   }
 
-
-  /// Generic appointment search
-  List<Appointment> getAppointments({String? patientName, Patient? patient, Status? status}) {
-    return appointments.where((a) {
-      if (patientName != null && !a.patient.name.toLowerCase().contains(patientName.toLowerCase())) return false;
-      if (patient != null && a.patient != patient) return false;
-      if (status != null && a.status != status) return false;
-      return true;
-    }).toList();
-  }
-
-  /// Get all doctors
+  // Get all doctors
   List<Doctor> getAllDoctors() => doctors;
 
-  /// Search doctor by name or specialization
+  // Search doctor by name or specialization
   List<Doctor> searchDoctor({String? name, Specialization? specialization}) {
     return doctors.where((d) {
       bool matches = true;
@@ -79,12 +68,12 @@ class HospitalAppointment {
     }).toList();
   }
 
-  /// Get doctors by specialization
+  // Get doctors by specialization
   List<Doctor> getDoctorsBySpecialization(Specialization specialization) {
     return doctors.where((d) => d.specialization == specialization).toList();
   }
 
-  /// Initialize slots for a specific date
+  // Initialize slots for a specific date
   void initializeSlotsForDate(DateTime date) {
     for (var doctor in doctors) {
       bool slotsExist = slots.any((s) =>
@@ -108,7 +97,7 @@ class HospitalAppointment {
     }
   }
 
-  /// Get available slots for a doctor on a date
+  // Get available slots for a doctor on a date
   List<BookingSlot> getAvailableSlots(DateTime date, Doctor doctor) {
     return slots.where((s) =>
         s.doctor.doctorId == doctor.doctorId &&
@@ -118,7 +107,7 @@ class HospitalAppointment {
         (s.appointment == null || s.appointment!.status == Status.canceled)).toList();
   }
 
-  /// Book an appointment
+  // Book an appointment
   void bookAppointment(Appointment appointment) {
     bool isAlreadyBooked = appointments.any((a) =>
         a.slot.doctor.doctorId == appointment.slot.doctor.doctorId &&
@@ -138,14 +127,14 @@ class HospitalAppointment {
     print('Appointment booked successfully!');
   }
 
-  /// Cancel an appointment
+  // Cancel an appointment
   void cancelAppointment(String appointmentId) {
     var appointment = appointments.firstWhere((a) => a.appointmentId == appointmentId);
     changeAppointmentStatus(appointment, Status.canceled);
     print("Appointment ${appointment.appointmentId} canceled.");
   }
 
-  /// Change appointment status (handles slot updates)
+  // Change appointment status (handles slot updates)
   void changeAppointmentStatus(Appointment appt, Status newStatus) {
     appt.changeStatus(newStatus);
     if (newStatus == Status.canceled) {
@@ -156,7 +145,7 @@ class HospitalAppointment {
     }
   }
 
-  /// Auto-cancel past due appointments
+  // Auto-cancel past due appointments
   List<Appointment> autoCancelPastDueAppointments() {
     List<Appointment> canceled = [];
     for (var appt in appointments) {
@@ -169,13 +158,7 @@ class HospitalAppointment {
     return canceled;
   }
 
-  /// Get appointment by list index
-  Appointment? getAppointmentByIndex(List<Appointment> list, int index) {
-    if (index < 0 || index >= list.length) return null;
-    return list[index];
-  }
-
-  /// Get appointments for a patient
+  // Get appointments for a patient
   List<Appointment> getAppointmentsForPatient(Patient patient, {Status? status}) {
     return appointments.where((a) {
       if (a.patient != patient) return false;
@@ -184,7 +167,7 @@ class HospitalAppointment {
     }).toList();
   }
 
-  /// Print appointments for a patient
+  // Print appointments for a patient
   void printAppointmentsForPatient(Patient patient) {
     var appts = getAppointmentsForPatient(patient);
     if (appts.isEmpty) {
@@ -196,7 +179,8 @@ class HospitalAppointment {
       print("---");
     }
   }
-  /// Search appointments by patient name AND patient/guardian phone number
+  
+  // Search appointments by patient name AND patient/guardian phone number
   List<Appointment> searchAppointmentsByPatientDetails(String name, String phone) {
     return appointments.where((a) {
       bool phoneMatches = false;
