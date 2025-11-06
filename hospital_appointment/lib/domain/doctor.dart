@@ -1,5 +1,5 @@
 import 'package:hospital_appointment/domain/person.dart';
-import 'package:uuid/uuid.dart';
+import 'package:hospital_appointment/utils/id_generator.dart';
 
 //AI generated
 enum Specialization {
@@ -14,13 +14,11 @@ enum Specialization {
   diabetes               // Diabetes / endocrinology care
 }
 
-var uuid = Uuid();
-
 class Doctor extends Person{
   String doctorId;
   Specialization specialization;
 
   Doctor({String? doctorId, required super.name,required super.gender,required super.dob,required super.phoneNumber, required this.specialization})
-        : doctorId = doctorId ?? uuid.v4();
+        : doctorId = doctorId ?? generateId('d');
 
 }

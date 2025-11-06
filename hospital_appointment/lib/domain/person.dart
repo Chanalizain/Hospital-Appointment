@@ -20,7 +20,6 @@ abstract class Person {
     DateTime today = DateTime.now();
     int age = today.year - dob.year;
 
-    // check birthday this year
     if (today.month < dob.month || (today.month == dob.month && today.day < dob.day)) {
       age--;
     }

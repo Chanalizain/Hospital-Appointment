@@ -1,221 +1,201 @@
-import 'package:hospital_appointment/domain/booking_slot.dart';
-import 'package:hospital_appointment/domain/appointment.dart';
 import 'package:hospital_appointment/domain/doctor.dart';
 import 'package:hospital_appointment/domain/patient.dart';
+import 'package:hospital_appointment/domain/booking_slot.dart';
+import 'package:hospital_appointment/domain/appointment.dart';
 
 class HospitalAppointment {
   List<Doctor> doctors;
-  List<Appointment> appointments = [];
-  List<BookingSlot> slots = [];
   List<Patient> patients = [];
+  List<BookingSlot> slots = [];
+  List<Appointment> appointments = [];
 
   HospitalAppointment({required this.doctors});
 
+  /// Register a new patient in hospital
   void registerPatient(Patient newPatient) {
-
-    if(newPatient.age < 18 && newPatient.guardian == null){
-      print("Patient is under 18 and must have a gaurdian");
+    if (newPatient.age < 18 && newPatient.guardian == null) {
+      print("Patient under 18 must have a guardian.");
       return;
     }
     if (newPatient.age >= 18) {
       newPatient.guardian = null;
     }
-    
-    bool exists;
 
-    if (newPatient.guardian != null) {
-      // Child with guardian
-      exists = patients.any((p) =>
-        p.name == newPatient.name &&
-        p.dob == newPatient.dob &&
-        p.guardian?.phone == newPatient.guardian?.phone
-      );
-    } else {
-      // adult
-      exists = patients.any((p) => p.phoneNumber == newPatient.phoneNumber);
-    }
+    bool exists = newPatient.guardian != null
+        ? patients.any((p) =>
+            p.name == newPatient.name &&
+            p.dob == newPatient.dob &&
+            p.guardian?.phone == newPatient.guardian?.phone)
+        : patients.any((p) => p.phoneNumber == newPatient.phoneNumber);
 
     if (exists) {
       print("Patient already registered.");
-    } else {
-      patients.add(newPatient);
-      print("Patient ${newPatient.name} registered successfully.");
-    }
-  }
-
-  Patient? searchPatient({String? phoneNumber, String? name, DateTime? dob}) {
-    for (var patient in patients) {
-      // adult
-      if (phoneNumber != null && patient.guardian == null && patient.phoneNumber == phoneNumber) {
-        if (name == null || patient.name == name) {
-          return patient;
-        }
-      }
-
-      // child with a gaurdian
-      if (phoneNumber != null && patient.guardian != null && patient.guardian!.phone == phoneNumber) {
-        if ((name == null || patient.name == name) &&
-            (dob == null || patient.dob == dob)) {
-          return patient;
-        }
-      }
-    }
-
-    print("No patient found.");
-    return null;
-  }
-
-    //Get all doctors
-  List<Doctor> getAllDoctors() {
-    return doctors;
-  }
-
-  //Search doctor
-  List<Doctor> searchDoctor({String? name, Specialization? specialization}) {
-    return doctors.where((doctor) {
-      bool matches = true;
-
-      if (name != null && name.isNotEmpty) {
-        matches &= doctor.name.toLowerCase().contains(name.toLowerCase());
-      }
-
-      if (specialization != null) {
-        matches &= doctor.specialization == specialization;
-      }
-
-      return matches;
-    }).toList();
-  }
-
-  //cancel appointment if passed the due date
-  void autoCancelPastAppointments() {
-    final now = DateTime.now();
-
-    for (var appointment in appointments) {
-      if (appointment.isPastDue) {
-        appointment.changeStatus(Status.canceled);
-        //print("Auto-canceled appointment ${appointment.appointmentId} (time passed)");
-      }
-    }
-  }
-
-  // get all available slots for a doctor on a specific date
-  List<BookingSlot> getAvailableSlots(DateTime date, Doctor doctor) {
-    return slots.where((slot) =>
-      slot.date.year == date.year &&
-      slot.date.month == date.month &&
-      slot.date.day == date.day &&
-      slot.doctor == doctor &&
-      !slot.isBooked
-    ).toList();
-  }
-
-
-  // Get all available slots for all doctors on a specific date
-  Map<Doctor, List<BookingSlot>> getAvailableSlotsAllDoctors(DateTime date) {
-    Map<Doctor, List<BookingSlot>> result = {};
-
-    for (var doctor in doctors) {
-      var availableSlots = getAvailableSlots(date, doctor);
-      if (availableSlots.isNotEmpty) {
-        result[doctor] = availableSlots;
-      }
-    }
-
-    return result;
-  }
-
-  void printAvailableSlotsAllDoctors(DateTime date) {
-    var allSlots = getAvailableSlotsAllDoctors(date);
-
-    if (allSlots.isEmpty) {
-      print("No available slots for any doctor on ${date.toLocal()}");
       return;
     }
 
-    print("Available slots for all doctors on ${date.toLocal()}:");
-    allSlots.forEach((doctor, slots) {
-      print("Doctor: ${doctor.name} (${doctor.specialization.name})");
-      for (var slot in slots) {
-        print("  ${slot.shift} - ${slot.getTimeSlotLabel(slot.shift, slot.timeSlot)}");
-      }
-    });
+    patients.add(newPatient);
+    print("Patient ${newPatient.name} registered successfully.");
   }
 
-  // get doctors by specialization
-  List<Doctor> getDoctorsBySpecialization(Specialization specialization) {
-    return doctors
-        .where((doctor) => doctor.specialization == specialization)
-        .toList();
-  }
-
-  // get available slots for doctors of a specific specialization
-  Map<Doctor, List<BookingSlot>> getAvailableSlotsBySpecialization(DateTime date, Specialization specialization) {
-    var allSlots = getAvailableSlotsAllDoctors(date);
-
-    return Map.fromEntries(
-      allSlots.entries.where(
-        (entry) => entry.key.specialization == specialization,
-      ),
+  /// Find patient by details
+  Patient? findPatientByNameDobPhone(String name, DateTime dob, String phone) {
+  try {
+    return patients.firstWhere(
+      (p) => p.name == name && p.dob == dob && p.phoneNumber == phone,
     );
+  } catch (e) {
+    return null; // return null if not found
   }
+}
 
-  void printAvailableSlotsBySpecialization(DateTime date, Specialization specialization) {
-    var available = getAvailableSlotsBySpecialization(date, specialization);
 
-    if (available.isEmpty) {
-      print("No available slots for ${specialization.name} doctors on ${date.toLocal()}");
-      return;
-    }
-
-    print("Available slots for ${specialization.name} doctors on ${date.toLocal()}:");
-    available.forEach((doctor, slots) {
-      print("Doctor: ${doctor.name}");
-      for (var slot in slots) {
-        print("  ${slot.shift.name} - ${slot.getTimeSlotLabel(slot.shift, slot.timeSlot)}");
-      }
-    });
-  }
-
-  // Book appointment
-  void bookAppointment(Appointment appointment) {
-    if (appointment.bookingslot.isBooked) {
-      throw Exception("Slot already booked!");
-    }
-
-    appointments.add(appointment);
-    appointment.bookingslot.book(appointment);
-    print("Appointment booked successfully for ${appointment.patient.name} with Dr.${appointment.doctor.name}");
-  }
-
-  // Cancel appointment by id
-  void cancelAppointment(String appointmentId) {
-    final appointment = appointments.firstWhere((a) => a.appointmentId == appointmentId);
-    appointment.changeStatus(Status.canceled);
-    print("Appointment ${appointment.appointmentId} canceled.");
-  }
-
-  //function for check appoinments of a patient
-  List<Appointment> getAppointmentsForPatient(
-    Patient patient, {Status? status}) {
-    return appointments.where((appt) {
-      if (appt.patient != patient) return false;
-      if (status != null && appt.status != status) return false;
+  /// Generic appointment search
+  List<Appointment> getAppointments({String? patientName, Patient? patient, Status? status}) {
+    return appointments.where((a) {
+      if (patientName != null && !a.patient.name.toLowerCase().contains(patientName.toLowerCase())) return false;
+      if (patient != null && a.patient != patient) return false;
+      if (status != null && a.status != status) return false;
       return true;
     }).toList();
   }
 
+  /// Get all doctors
+  List<Doctor> getAllDoctors() => doctors;
+
+  /// Search doctor by name or specialization
+  List<Doctor> searchDoctor({String? name, Specialization? specialization}) {
+    return doctors.where((d) {
+      bool matches = true;
+      if (name != null && name.isNotEmpty) {
+        matches &= d.name.toLowerCase().contains(name.toLowerCase());
+      }
+      if (specialization != null) {
+        matches &= d.specialization == specialization;
+      }
+      return matches;
+    }).toList();
+  }
+
+  /// Get doctors by specialization
+  List<Doctor> getDoctorsBySpecialization(Specialization specialization) {
+    return doctors.where((d) => d.specialization == specialization).toList();
+  }
+
+  /// Initialize slots for a specific date
+  void initializeSlotsForDate(DateTime date) {
+    for (var doctor in doctors) {
+      bool slotsExist = slots.any((s) =>
+          s.doctor.doctorId == doctor.doctorId &&
+          s.date.year == date.year &&
+          s.date.month == date.month &&
+          s.date.day == date.day);
+
+      if (!slotsExist) {
+        for (var shift in WorkShift.values) {
+          for (var timeSlot in TimeSlot.values) {
+            slots.add(BookingSlot(
+              doctor: doctor,
+              date: date,
+              shift: shift,
+              timeSlot: timeSlot,
+            ));
+          }
+        }
+      }
+    }
+  }
+
+  /// Get available slots for a doctor on a date
+  List<BookingSlot> getAvailableSlots(DateTime date, Doctor doctor) {
+    return slots.where((s) =>
+        s.doctor.doctorId == doctor.doctorId &&
+        s.date.year == date.year &&
+        s.date.month == date.month &&
+        s.date.day == date.day &&
+        (s.appointment == null || s.appointment!.status == Status.canceled)).toList();
+  }
+
+  /// Book an appointment
+  void bookAppointment(Appointment appointment) {
+    bool isAlreadyBooked = appointments.any((a) =>
+        a.slot.doctor.doctorId == appointment.slot.doctor.doctorId &&
+        a.slot.date.year == appointment.slot.date.year &&
+        a.slot.date.month == appointment.slot.date.month &&
+        a.slot.date.day == appointment.slot.date.day &&
+        a.slot.shift == appointment.slot.shift &&
+        a.slot.timeSlot == appointment.slot.timeSlot &&
+        a.status != Status.canceled);
+
+    if (isAlreadyBooked) {
+      throw Exception('Slot already booked!');
+    }
+
+    appointments.add(appointment);
+    appointment.slot.isBooked = true;
+    print('Appointment booked successfully!');
+  }
+
+  /// Cancel an appointment
+  void cancelAppointment(String appointmentId) {
+    var appointment = appointments.firstWhere((a) => a.appointmentId == appointmentId);
+    changeAppointmentStatus(appointment, Status.canceled);
+    print("Appointment ${appointment.appointmentId} canceled.");
+  }
+
+  /// Change appointment status (handles slot updates)
+  void changeAppointmentStatus(Appointment appt, Status newStatus) {
+    appt.changeStatus(newStatus);
+    if (newStatus == Status.canceled) {
+      appt.slot.unbook();
+    } else {
+      appt.slot.isBooked = true;
+      appt.slot.appointment = appt;
+    }
+  }
+
+  /// Auto-cancel past due appointments
+  List<Appointment> autoCancelPastDueAppointments() {
+    List<Appointment> canceled = [];
+    for (var appt in appointments) {
+      if (appt.status == Status.waiting && appt.isPastDue) {
+        changeAppointmentStatus(appt, Status.canceled);
+        canceled.add(appt);
+        print("Appointment ${appt.appointmentId} auto-canceled because it is past due.");
+      }
+    }
+    return canceled;
+  }
+
+  /// Search appointments by patient name
+  List<Appointment> searchAppointmentsByPatientName(String name) {
+    return appointments.where((a) => a.patient.name.toLowerCase().contains(name.toLowerCase())).toList();
+  }
+
+  /// Get appointment by list index
+  Appointment? getAppointmentByIndex(List<Appointment> list, int index) {
+    if (index < 0 || index >= list.length) return null;
+    return list[index];
+  }
+
+  /// Get appointments for a patient
+  List<Appointment> getAppointmentsForPatient(Patient patient, {Status? status}) {
+    return appointments.where((a) {
+      if (a.patient != patient) return false;
+      if (status != null && a.status != status) return false;
+      return true;
+    }).toList();
+  }
+
+  /// Print appointments for a patient
   void printAppointmentsForPatient(Patient patient) {
-    final appts = getAppointmentsForPatient(patient);
+    var appts = getAppointmentsForPatient(patient);
     if (appts.isEmpty) {
       print("No appointments found for ${patient.name}");
       return;
     }
-    for (var appt in appts) {
-      appt.displayAppointment();
-      print('---');
+    for (var a in appts) {
+      a.display();
+      print("---");
     }
   }
-
-
 }

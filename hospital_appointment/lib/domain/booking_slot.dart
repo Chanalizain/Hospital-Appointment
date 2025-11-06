@@ -27,26 +27,11 @@ class BookingSlot {
     this.isBooked = false, 
     this.appointment,
     required this.doctor
-  }) : assert(isBooked == (appointment != null), 
-            'isBooked must match the presence of an appointment.');
+  });
 
-  String get slotLabel {
-    final slotDescription = timeSlot.name.toUpperCase(); 
-
-    if (isBooked) {
-      final patientName = appointment?.patient.name ?? 'Unknown'; 
-      return '$slotDescription (BOOKED by $patientName)';
-    } else {
-      return '$slotDescription (AVAILABLE)';
-    }
-  }
-
-  //method to mark the slot as booked
-  void book(Appointment newAppointment) {
-    if (isBooked) {
-      throw Exception('This slot is already booked.');
-    }
-    appointment = newAppointment;
+  void book(Appointment appt) {
+    if (isBooked) throw Exception("Slot already booked.");
+    appointment = appt;
     isBooked = true;
   }
   
@@ -55,26 +40,115 @@ class BookingSlot {
     isBooked = false;
   }
 
-  String getTimeSlotLabel(WorkShift shift, TimeSlot slot) {
+  String getTimeSlotLabel(WorkShift shift, TimeSlot timeSlot) {
     if (shift == WorkShift.morning) {
-      switch (slot) {
-        case TimeSlot.slot1:
-          return "8:00 - 9:00";
-        case TimeSlot.slot2:
-          return "9:15 - 10:15";
-        case TimeSlot.slot3:
-          return "10:30 - 11:45";
-      }
-    } else {
-      switch (slot) {
-        case TimeSlot.slot1:
-          return "1:30 - 2:30";
-        case TimeSlot.slot2:
-          return "2:45 - 3:45";
-        case TimeSlot.slot3:
-          return "4:00 - 5:00";
-      }
+      switch (timeSlot) {
+      case TimeSlot.slot1:
+      return "08:00 - 09:00";
+      case TimeSlot.slot2:
+      return "09:15 - 10:15";
+      case TimeSlot.slot3:
+      return "10:30 - 11:30";
     }
+    } 
+    else {
+      switch (timeSlot) {
+      case TimeSlot.slot1:
+      return "13:30 - 14:30";
+      case TimeSlot.slot2:
+      return "14:45 - 15:45";
+      case TimeSlot.slot3:
+      return "16:00 - 17:00";
+    }
+    }
+  }
+
+    DateTime getStartDateTime() {
+    // Return DateTime of slot start
+    int hour = 0;
+    int minute = 0;
+
+    switch (shift) {
+      case WorkShift.morning:
+        switch (timeSlot) {
+          case TimeSlot.slot1:
+            hour = 8;
+            minute = 0;
+            break;
+          case TimeSlot.slot2:
+            hour = 9;
+            minute = 15;
+            break;
+          case TimeSlot.slot3:
+            hour = 10;
+            minute = 30;
+            break;
+        }
+        break;
+
+      case WorkShift.afternoon:
+        switch (timeSlot) {
+          case TimeSlot.slot1:
+            hour = 13;
+            minute = 30;
+            break;
+          case TimeSlot.slot2:
+            hour = 14;
+            minute = 45;
+            break;
+          case TimeSlot.slot3:
+            hour = 16;
+            minute = 0;
+            break;
+        }
+        break;
+    }
+
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
+
+  DateTime getEndDateTime() {
+    // Return DateTime of slot end
+    int hour = 0;
+    int minute = 0;
+
+    switch (shift) {
+      case WorkShift.morning:
+        switch (timeSlot) {
+          case TimeSlot.slot1:
+            hour = 9;
+            minute = 0;
+            break;
+          case TimeSlot.slot2:
+            hour = 10;
+            minute = 15;
+            break;
+          case TimeSlot.slot3:
+            hour = 11;
+            minute = 30;
+            break;
+        }
+        break;
+
+      case WorkShift.afternoon:
+        switch (timeSlot) {
+          case TimeSlot.slot1:
+            hour = 14;
+            minute = 30;
+            break;
+          case TimeSlot.slot2:
+            hour = 15;
+            minute = 45;
+            break;
+          case TimeSlot.slot3:
+            hour = 17;
+            minute = 0;
+            break;
+        }
+        break;
+    }
+
+    return DateTime(date.year, date.month, date.day, hour, minute);
   }
 
 }

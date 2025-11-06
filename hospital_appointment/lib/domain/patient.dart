@@ -1,9 +1,6 @@
 import 'package:hospital_appointment/domain/guardian.dart';
 import 'package:hospital_appointment/domain/person.dart';
-
-import 'package:uuid/uuid.dart';
-
-var uuid = Uuid();
+import 'package:hospital_appointment/utils/id_generator.dart';
 
 class Patient extends Person {
   String patientId;
@@ -16,6 +13,8 @@ class Patient extends Person {
     required super.dob,
     String? phoneNumber, 
     this.guardian,
-  })  : patientId = patientId ?? uuid.v4(),
+  })  : patientId = patientId ?? generateId('p'),
         super(phoneNumber: phoneNumber ?? guardian?.phone ?? '');
+  
+ 
 }
