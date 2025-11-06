@@ -200,27 +200,5 @@ class HospitalAppointment {
       print("---");
     }
   }
-  Patient? registerOrGetPatient({required String name, required DateTime dob, required String phone, Guardian? guardian,}) {
-    // Check for existing patient
-    for (var p in patients) {
-      if (p.name.toLowerCase() == name.toLowerCase() &&
-      p.phoneNumber == phone &&
-      p.dob.year == dob.year &&
-      p.dob.month == dob.month &&
-      p.dob.day == dob.day) {
-      return p; 
-    }
-    }
-    // Register new patient
-    var newPatient = Patient(
-      name: name,
-      gender: Gender.preferNotToSay,
-      dob: dob,
-      phoneNumber: phone,
-      guardian: guardian,
-    );
-    registerPatient(newPatient);
-    return newPatient;
-  }
 
 }
