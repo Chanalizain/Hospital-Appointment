@@ -26,7 +26,10 @@ class HospitalAppointment {
             p.name == newPatient.name &&
             p.dob == newPatient.dob &&
             p.guardian?.phone == newPatient.guardian?.phone)
-        : patients.any((p) => p.phoneNumber == newPatient.phoneNumber);
+        : patients.any((p) => 
+            p.name == newPatient.name &&
+            p.dob == newPatient.dob &&
+            p.phoneNumber == newPatient.phoneNumber);
 
     if (exists) {
       print("Patient already registered.");
