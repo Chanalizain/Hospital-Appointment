@@ -15,10 +15,14 @@ enum Specialization {
 }
 
 class Doctor extends Person{
-  String doctorId;
-  Specialization specialization;
+  final String _doctorId;
+  final Specialization _specialization;
 
-  Doctor({String? doctorId, required super.name,required super.gender,required super.dob,required super.phoneNumber, required this.specialization})
-        : doctorId = doctorId ?? generateId('d');
+  Doctor({String? doctorId, required super.name,required super.gender,required super.dob,required super.phoneNumber, required Specialization specialization,})
+        : _doctorId = doctorId ?? generateId('d'),
+          _specialization = specialization;
+
+  String get doctorId => _doctorId;
+  Specialization get specialization => _specialization;
 
 }

@@ -58,7 +58,7 @@ void main() {
   });
 
   test('Find patient by name, dob, phone', () {
-    var found = hospital.findPatientByNameDobPhone("Kem Veysean", DateTime(1990, 5, 12), "123456789");
+    var found = hospital.findPatientByNamePhone("Kem Veysean", "123456789");
     expect(found, isNotNull);
     expect(found!.name, equals("Kem Veysean"));
   });

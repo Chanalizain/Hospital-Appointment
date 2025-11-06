@@ -1,26 +1,28 @@
 enum Gender{ female, male, preferNotToSay}
 
 abstract class Person {
-  String name;
-  Gender gender;
-  DateTime dob;
-  String phoneNumber;
+  final String _name;
+  final Gender _gender;
+  final DateTime _dob;
+  final String _phoneNumber;
 
-  Person({required this.name, required this.gender, required this.dob, required this.phoneNumber});
+  Person({required String name, required Gender gender, required DateTime dob, required String phoneNumber,})  
+    : _name = name,
+      _gender = gender,
+      _dob = dob,
+      _phoneNumber = phoneNumber;
 
-
-  void displayInfo() {
-    print('Name: $name');
-    print('Gender: $gender');
-    print('Date of Birth: ${dob.toLocal()}');
-    print('Phone Number: $phoneNumber');
-  }
+  // Getters
+  String get name => _name;
+  Gender get gender => _gender;
+  DateTime get dob => _dob;
+  String get phoneNumber => _phoneNumber;
 
   int get age {
     DateTime today = DateTime.now();
-    int age = today.year - dob.year;
+    int age = today.year - _dob.year;
 
-    if (today.month < dob.month || (today.month == dob.month && today.day < dob.day)) {
+    if (today.month < _dob.month || (today.month == _dob.month && today.day < _dob.day)) {
       age--;
     }
     return age;

@@ -5,22 +5,34 @@ import 'package:hospital_appointment/domain/booking_slot.dart';
 
 enum Status { waiting, canceled, completed }
 class Appointment {
-  String appointmentId;
-  Patient patient;
-  Doctor doctor;
-  BookingSlot slot;
-  Status status;
+  final String _appointmentId;
+  final Patient _patient;
+  final Doctor _doctor;
+  final BookingSlot _slot;
+  Status _status;
+
   Appointment({
     String? appointmentId,
-    required this.patient,
-    required this.doctor,
-    required this.slot,
-    this.status = Status.waiting,
-  }) : appointmentId = appointmentId ?? generateId('a') {
-    if (!slot.isBooked && status != Status.canceled) {
-      slot.book(this);
+    required Patient patient,
+    required Doctor doctor,
+    required BookingSlot slot,
+    Status status = Status.waiting,
+  })  : _appointmentId = appointmentId ?? generateId('a'),
+        _patient = patient,
+        _doctor = doctor,
+        _slot = slot,
+        _status = status {
+    if (!_slot.isBooked && _status != Status.canceled) {
+      _slot.book(this);
     }
   }
+
+  String get appointmentId => _appointmentId;
+  Patient get patient => _patient;
+  Doctor get doctor => _doctor;
+  BookingSlot get slot => _slot;
+  Status get status => _status;
+
   void display() {
     print("Appointment ID: $appointmentId");
     print("Date: ${slot.date.toLocal().toIso8601String().split('T')[0]}");
@@ -57,7 +69,7 @@ void changeStatus(Status newStatus) {
     if (slot.isBooked) slot.unbook();
   }
 
-  status = newStatus;
+  _status = newStatus;
   print("Appointment $appointmentId status changed to $status");
 }
 

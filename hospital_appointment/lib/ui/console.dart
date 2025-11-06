@@ -214,25 +214,19 @@ class AppointmentConsole {
 
     stdout.write("Enter patient name: ");
     String? name = stdin.readLineSync();
-    stdout.write("Enter date of birth (yyyy-mm-dd): ");
-    String? dobInput = stdin.readLineSync();
-    if (name == null || dobInput == null) return null;
 
-    DateTime dob;
-    try {
-      dob = DateTime.parse(dobInput);
-    } catch (e) {
-      print("Invalid date format.");
+    stdout.write("Enter phone number: ");
+    String? phone = stdin.readLineSync();
+
+    if (name == null || phone == null || name.isEmpty || phone.isEmpty) {
+      print("Invalid input.");
       return null;
     }
 
-    final age = DateTime.now().year - dob.year;
-    stdout.write(age < 18 ? "Enter guardian phone number: " : "Enter patient phone number: ");
-    String? phone = stdin.readLineSync();
-    if (phone == null) return null;
-
-    var patient = hospital.findPatientByNameDobPhone(name, dob, phone);
-    if (patient == null) print("Patient not found.");
+    var patient = hospital.findPatientByNamePhone(name, phone);
+    if (patient == null) {
+      print("Patient not found.");
+    }
     return patient;
   }
 

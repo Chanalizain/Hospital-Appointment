@@ -37,16 +37,16 @@ class HospitalAppointment {
     print("Patient ${newPatient.name} registered successfully.");
   }
 
-  /// Find patient by details
-  Patient? findPatientByNameDobPhone(String name, DateTime dob, String phone) {
-  try {
-    return patients.firstWhere(
-      (p) => p.name == name && p.dob == dob && p.phoneNumber == phone,
-    );
-  } catch (e) {
-    return null; // return null if not found
+  /// Find patient by name and phone number
+  Patient? findPatientByNamePhone(String name, String phone) {
+    try {
+      return patients.firstWhere(
+        (p) => p.name.toLowerCase() == name.toLowerCase() && p.phoneNumber == phone,
+      );
+    } catch (e) {
+      return null;
+    }
   }
-}
 
 
   /// Generic appointment search
