@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:hospital_appointment/domain/booking_slot.dart';
 import 'package:hospital_appointment/domain/guardian.dart';
-import 'package:hospital_appointment/domain/person.dart';
 import '../domain/hospital_appointment.dart';
 import '../domain/doctor.dart';
 import '../domain/patient.dart';
@@ -247,8 +246,10 @@ class AppointmentConsole {
     String? name = stdin.readLineSync();
     stdout.write("Enter date of birth (yyyy-mm-dd): ");
     String? dobInput = stdin.readLineSync();
-    if (name == null || dobInput == null) return null;
-
+    if (name == null || name.isEmpty || dobInput == null || dobInput.isEmpty) {
+      print("Invalid input.");
+      return null;
+    }
     DateTime dob;
     try {
       dob = DateTime.parse(dobInput);
@@ -256,13 +257,11 @@ class AppointmentConsole {
       print("Invalid date format.");
       return null;
     }
-
     Guardian? guardian;
     String? phone;
     final age = DateTime.now().year - dob.year;
-
     if (age < 18) {
-      print("Patient is under 18. Enter guardian information.");
+      print("Patient is under 18. Enter guardian info.");
       stdout.write("Guardian name: ");
       String? gName = stdin.readLineSync();
       stdout.write("Guardian phone: ");
@@ -270,30 +269,44 @@ class AppointmentConsole {
       stdout.write("Guardian relation: ");
       String? gRelation = stdin.readLineSync();
       if (gName == null || gPhone == null || gRelation == null) return null;
-
-      try {
-        guardian = Guardian(
-          name: gName,
-          phone: gPhone,
-          relation: Relation.values.firstWhere((r) => r.toString().split('.').last == gRelation),
-        );
-      } catch (e) {
-        guardian = Guardian(name: gName, phone: gPhone, relation: Relation.other);
-      }
+      guardian = Guardian(
+        name: gName,
+        phone: gPhone,
+        //AI generated
+        relation: Relation.values.firstWhere(
+          (r) => r.toString().split('.').last == gRelation,
+          orElse: () => Relation.other,
+        ),
+      );
       phone = guardian.phone;
     } else {
       stdout.write("Enter phone number: ");
       phone = stdin.readLineSync() ?? '';
     }
-
-    List<Patient> existingPatients = repository.patientRepo.readPatients();
-    var patient = Patient(name: name, gender: Gender.preferNotToSay, dob: dob, phoneNumber: phone, guardian: guardian);
-    hospital.registerPatient(patient);
-    existingPatients.add(patient);
-    repository.patientRepo.writePatients(existingPatients);
-    hospital.patients = existingPatients;
+    var patient = hospital.registerOrGetPatient(
+      name: name,
+      dob: dob,
+      phone: phone,
+      guardian: guardian,
+    );
+    // If patient already existed, ask user if they want to use it
+    if (hospital.patients.contains(patient)) {
+      print("\nPatient already registered:");
+      print("Name: ${patient!.name}");
+      print("Phone: ${patient.phoneNumber}");
+      print("DOB: ${patient.dob.toIso8601String().split('T').first}");
+      stdout.write("\nUse this existing patient? (y/n): ");
+      String? choice = stdin.readLineSync();
+      if (choice == null || choice.toLowerCase() != 'y') {
+        print("Returning to patient menu...");
+        return null; 
+      }
+    }
+    repository.patientRepo.writePatients(hospital.patients);
+    print("Patient ready for booking!");
     return patient;
   }
+
 
   /// VIEW APPOINTMENTS
   void viewAppointmentsFlow() {
