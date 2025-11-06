@@ -42,35 +42,35 @@ class Appointment {
     print("Status: $status");
   }
   bool get isPastDue {
-  final now = DateTime.now();
-  final endTimeStr = slot.getTimeSlotLabel(slot.shift, slot.timeSlot).split('-').last.trim();
-  final parts = endTimeStr.split(':');
-  final endHour = int.parse(parts[0]);
-  final endMinute = int.parse(parts[1]);
-  final endDateTime = DateTime(slot.date.year, slot.date.month, slot.date.day, endHour, endMinute);
-  return endDateTime.isBefore(now) && status == Status.waiting;
-}
-
-void changeStatus(Status newStatus) {
-  if (status == Status.canceled && newStatus != Status.canceled) {
-    throw Exception("Cannot change canceled appointment.");
-  }
-
-  if (newStatus == Status.completed) {
     final now = DateTime.now();
-    final slotStart = slot.getStartDateTime();
-    if (now.isBefore(slotStart)) {
-      throw Exception("Cannot mark appointment as completed before its scheduled time.");
+    final endTimeStr = slot.getTimeSlotLabel(slot.shift, slot.timeSlot).split('-').last.trim();
+    final parts = endTimeStr.split(':');
+    final endHour = int.parse(parts[0]);
+    final endMinute = int.parse(parts[1]);
+    final endDateTime = DateTime(slot.date.year, slot.date.month, slot.date.day, endHour, endMinute);
+    return endDateTime.isBefore(now) && status == Status.waiting;
+  }
+
+  void changeStatus(Status newStatus) {
+    if (status == Status.canceled && newStatus != Status.canceled) {
+      throw Exception("Cannot change canceled appointment.");
     }
-  }
 
-  if (newStatus == Status.canceled) {
-    // Unbook slot only if it was booked
-    if (slot.isBooked) slot.unbook();
-  }
+    if (newStatus == Status.completed) {
+      final now = DateTime.now();
+      final slotStart = slot.getStartDateTime();
+      if (now.isBefore(slotStart)) {
+        throw Exception("Cannot mark appointment as completed before its scheduled time.");
+      }
+    }
 
-  _status = newStatus;
-  print("Appointment $appointmentId status changed to $status");
-}
+    if (newStatus == Status.canceled) {
+      // Unbook slot only if it was booked
+      if (slot.isBooked) slot.unbook();
+    }
+
+    _status = newStatus;
+    print("Appointment $appointmentId status changed to $status");
+  }
 
 }
