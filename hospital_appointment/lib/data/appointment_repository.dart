@@ -75,7 +75,7 @@ class AppointmentRepository {
       'appointments': hospital.appointments.map((a) => {
         'appointmentId': a.appointmentId,
         'patientId': a.patient.patientId, // store only patientId
-        'doctorId': a.doctor.doctorId,
+        'doctorId': a.slot.doctor.doctorId,
         'date': a.slot.date.toIso8601String(),
         'shift': a.slot.shift.toString(),
         'timeSlot': a.slot.timeSlot.toString(),

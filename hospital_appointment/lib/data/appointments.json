@@ -1,0 +1,22 @@
+{
+  "appointments": [
+    {
+      "appointmentId": "a-0a7879ff-333a-4ac8-b217-89fefeecddfd",
+      "patientId": "p-010a3907-186c-4d7e-a51f-2988393fa187",
+      "doctorId": "d-b6d687e7-0d6d-41e1-ad8a-c8ed71616045",
+      "date": "2025-11-10T00:00:00.000",
+      "shift": "WorkShift.afternoon",
+      "timeSlot": "TimeSlot.slot3",
+      "status": "Status.waiting"
+    },
+    {
+      "appointmentId": "a-d86ab31d-c7ed-415b-919a-d99778b01b13",
+      "patientId": "p-010a3907-186c-4d7e-a51f-2988393fa187",
+      "doctorId": "d-b6d687e7-0d6d-41e1-ad8a-c8ed71616045",
+      "date": "2025-11-10T00:00:00.000",
+      "shift": "WorkShift.afternoon",
+      "timeSlot": "TimeSlot.slot2",
+      "status": "Status.waiting"
+    }
+  ]
+}

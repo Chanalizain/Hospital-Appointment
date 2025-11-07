@@ -397,7 +397,7 @@ class AppointmentConsole {
       for (int i = 0; i < listToShow.length; i++) {
         var a = listToShow[i];
         print(
-            "${i + 1}. Dr. ${a.doctor.name} | ${a.slot.date.toIso8601String().split('T').first} | ${a.patient.name} | ${a.slot.shift.name}-${a.slot.timeSlot.name} | Status: ${a.status.name}");
+            "${i + 1}. Dr. ${a.slot.doctor.name} | ${a.slot.date.toIso8601String().split('T').first} | ${a.patient.name} | ${a.slot.shift.name}-${a.slot.timeSlot.name} | Status: ${a.status.name}");
       }
       stdout.write("\nPress Enter to return to the main menu...");
       stdin.readLineSync();
@@ -445,7 +445,7 @@ class AppointmentConsole {
       for (int i = 0; i < listToShow.length; i++) {
         var a = listToShow[i];
         print(
-            "${i + 1}. Dr. ${a.doctor.name} | ${a.slot.date.toIso8601String().split('T').first} | ${a.patient.name} | ${a.slot.shift.name}-${a.slot.timeSlot.name} | Status: ${a.status.name}");
+            "${i + 1}. Dr. ${a.slot.doctor.name} | ${a.slot.date.toIso8601String().split('T').first} | ${a.patient.name} | ${a.slot.shift.name}-${a.slot.timeSlot.name} | Status: ${a.status.name}");
       }
 
       stdout.write("\nEnter number to cancel or 0 to return: ");
@@ -511,7 +511,7 @@ class AppointmentConsole {
       for (int i = 0; i < listToShow.length; i++) {
         var a = listToShow[i];
         print(
-            "${i + 1}. Dr. ${a.doctor.name} | ${a.slot.date.toIso8601String().split('T').first} | ${a.patient.name} | ${a.slot.shift.name}-${a.slot.timeSlot.name} | Status: ${a.status.name}");
+            "${i + 1}. Dr. ${a.slot.doctor.name} | ${a.slot.date.toIso8601String().split('T').first} | ${a.patient.name} | ${a.slot.shift.name}-${a.slot.timeSlot.name} | Status: ${a.status.name}");
       }
 
       stdout.write("\nEnter number to update or 0 to return: ");

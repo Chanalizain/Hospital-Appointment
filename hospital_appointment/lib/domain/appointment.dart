@@ -7,7 +7,7 @@ enum Status { waiting, canceled, completed }
 class Appointment {
   final String _appointmentId;
   final Patient _patient;
-  final Doctor _doctor;
+
   final BookingSlot _slot;
   Status _status;
 
@@ -19,7 +19,7 @@ class Appointment {
     Status status = Status.waiting,
   })  : _appointmentId = appointmentId ?? generateId('a'),
         _patient = patient,
-        _doctor = doctor,
+      
         _slot = slot,
         _status = status {
     if (!_slot.isBooked && _status != Status.canceled) {
@@ -29,7 +29,7 @@ class Appointment {
 
   String get appointmentId => _appointmentId;
   Patient get patient => _patient;
-  Doctor get doctor => _doctor;
+
   BookingSlot get slot => _slot;
   Status get status => _status;
 
@@ -37,7 +37,7 @@ class Appointment {
     print("Appointment ID: $appointmentId");
     print("Date: ${slot.date.toLocal().toIso8601String().split('T')[0]}");
     print("Time: ${slot.getTimeSlotLabel(slot.shift, slot.timeSlot)}");
-    print("Doctor: ${doctor.name}");
+    print("Doctor: ${slot.doctor.name}");
     print("Patient: ${patient.name}");
     print("Status: $status");
   }
