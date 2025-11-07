@@ -112,25 +112,14 @@ void main() {
   });
 
   test('Prevent registering two patients with the same info', () {
-    // Create a patient
-    Patient duplicatePatient = Patient(
-    name: "Chan Linna",
-    dob: DateTime(2007, 04, 09),
-    phoneNumber: "111222333",
-    guardian: null,
-    gender: Gender.female
-  );
-
-    // Register first time
-    hospital.registerPatient(duplicatePatient);
-    expect(hospital.patients.contains(duplicatePatient), isTrue);
 
     // Try to register the same patient again
+    //Adult patient earlier
     Patient duplicateAttempt = Patient(
-      name: "Chan Linna",
-      dob: DateTime(2007, 04, 09),
-      phoneNumber: "111222333",
-      guardian: null,
+      name: "Kem Veysean", 
+      dob: DateTime(1990, 5, 12), 
+      phoneNumber: "123456789", 
+      guardian: null, 
       gender: Gender.female
     );
 
@@ -138,11 +127,12 @@ void main() {
 
     // Expect the hospital patients list to only contain one instance
     var matches = hospital.patients.where((p) =>
-      p.name == "Chan Linna" &&
-      p.dob == DateTime(2007, 04, 09) &&
-      p.phoneNumber == "111222333"
+      p.name == "Kem Veysean" &&
+      p.dob == DateTime(1990, 5, 12) &&
+      p.phoneNumber == "123456789"
     );
     expect(matches.length, equals(1));
   });
+
 
 }
