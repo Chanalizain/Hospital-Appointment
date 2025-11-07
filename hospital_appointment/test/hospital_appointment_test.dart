@@ -110,4 +110,39 @@ void main() {
     var searchResults = hospital.searchAppointmentsByPatientDetails("Veysean", "123456789");
     expect(searchResults.contains(appt), isTrue);
   });
+
+  test('Prevent registering two patients with the same info', () {
+    // Create a patient
+    Patient duplicatePatient = Patient(
+    name: "Chan Linna",
+    dob: DateTime(2007, 04, 09),
+    phoneNumber: "111222333",
+    guardian: null,
+    gender: Gender.female
+  );
+
+    // Register first time
+    hospital.registerPatient(duplicatePatient);
+    expect(hospital.patients.contains(duplicatePatient), isTrue);
+
+    // Try to register the same patient again
+    Patient duplicateAttempt = Patient(
+      name: "Chan Linna",
+      dob: DateTime(2007, 04, 09),
+      phoneNumber: "111222333",
+      guardian: null,
+      gender: Gender.female
+    );
+
+    hospital.registerPatient(duplicateAttempt);
+
+    // Expect the hospital patients list to only contain one instance
+    var matches = hospital.patients.where((p) =>
+      p.name == "Chan Linna" &&
+      p.dob == DateTime(2007, 04, 09) &&
+      p.phoneNumber == "111222333"
+    );
+    expect(matches.length, equals(1));
+  });
+
 }
