@@ -57,7 +57,7 @@ void main() {
     expect(hospital.patients.contains(childPatient), isTrue);
   });
 
-  test('Find patient by name, dob, phone', () {
+  test('Find patient by name, phone', () {
     var found = hospital.findPatientByNamePhone("Kem Veysean", "123456789");
     expect(found, isNotNull);
     expect(found!.name, equals("Kem Veysean"));
